@@ -2,27 +2,24 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit multilib
+inherit multilib subversion
+
+ESVN_REPO_URI="https://svn.process-one.net/ejabberd-modules/pgsql/trunk"
+ESVN_PROJECT="${PN}"
 
 DESCRIPTION="Native Postgres driver for erlang"
 HOMEPAGE="http://process-one.net"
-SRC_URI=""
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~x86 ~amd64 -*"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="dev-lang/erlang"
 RDEPEND="${DEPEND}"
-S=${WORKDIR}/postgres
-
-src_unpack() {
-	cp -r ${FILESDIR}/postgres ${WORKDIR}
-}
 
 src_compile() {
-	find -name "*.erl" -exec erlc {} \;
+	./build.sh
 }
 
 src_install() {
@@ -30,9 +27,9 @@ src_install() {
 
 	dodir ${ERL_LIBDIR}/postgres/ebin
 	insinto ${ERL_LIBDIR}/postgres/ebin
-	doins *.beam
+	doins ebin/*.beam
 
 	dodir ${ERL_LIBDIR}/postgres/src
 	insinto ${ERL_LIBDIR}/postgres/src
-	doins *.erl
+	doins src/*.erl
 }
